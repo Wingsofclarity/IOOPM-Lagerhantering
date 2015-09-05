@@ -13,27 +13,30 @@ int scanSingleInt();
 void clearInput();
 int countWares();
 
-struct shelf {
+struct Shelf {
   char c;
   int i;
 };
-struct ware
+struct Ware
 {
   char name[20];
   int price;
-  struct shelf shelf;
+  struct Shelf shelf;
 };
 
-struct ware wares[20]; //Array of all the wares.
-bool quit=false;
 
+  bool quit=false;
 int main()
-{ 
+{
+  struct Ware wares[1]; //Array of all the wares.
+  wares[0].name[0]='0'; //Nullifying first and only element.
+
+  
   fflush(stdout);
   welcome();
 
   while (quit==false) {
-    menu();
+    menu(wares);
   }
   return 0;
 }
@@ -44,7 +47,7 @@ void welcome() {
   fflush(stdout);
 }
 
-void menu() {
+void menu(struct Ware *wares) {
   int answer = 8;
   printf("Select one alternative by entering one integer: ");
   answer = scanSingleInt();
@@ -54,7 +57,7 @@ void menu() {
     answer = scanSingleInt();
   }
   switch (answer) {
-    case 1: addWare(); break;
+    case 1: addWare(wares); break;
     case 2: removeWare(); break;
     case 8: quit=true; return;
     default: printf("Critical error.\n"); break;
@@ -62,7 +65,7 @@ void menu() {
   return;
 }
 
-void addWare() {
+void addWare(struct Ware *wares) {
   printf("add ware initiated.\n");
   wares[countWares()].price = 2;
   strcpy(wares[countWares()].name, "notnull");
@@ -72,7 +75,7 @@ void removeWare() {
   
 }
 
-void extendArray(struct ware *a){
+void extendArray(struct Ware *a){
   
   //struct ware *b = a
 
@@ -91,7 +94,7 @@ void clearInput() {
   return;
 }
 
-int countWares(struct ware wares[]) {
+int countWares(struct Ware wares[]) {
   if (wares[0].name==NULL) return 0;
   int i = 0;
   for (i=0; wares[0].name==NULL; i++) {}
