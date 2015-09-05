@@ -1,0 +1,107 @@
+//C hello world example
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+
+void welcome();
+void  menu();
+void addWare();
+void removeWare();
+void extendArray();
+int scanSingleInt();
+void clearInput();
+int countWares();
+
+struct Shelf {
+  char c;
+  int i;
+};
+struct Ware
+{
+  char name[20];
+  int price;
+  struct Shelf shelf;
+};
+
+
+  bool quit=false;
+int main()
+{
+  struct Ware wares[0]; //Array of all the wares.
+  
+  fflush(stdout);
+  welcome();
+
+  while (quit==false) {
+    menu(wares);
+  }
+  return 0;
+}
+
+
+void welcome() {
+  printf("Welcome to my storage thingy...\n");
+  fflush(stdout);
+}
+
+void menu(struct Ware *wares) {
+  int answer = 8;
+  printf("Select one alternative by entering one integer: ");
+  answer = scanSingleInt();
+  while (answer<0 || answer>8) {
+    printf("Invalid entry.\n");
+    printf("Select one alternative by entering one integer: ");
+    answer = scanSingleInt();
+  }
+  switch (answer) {
+    case 1: addWare(wares); break;
+    case 2: removeWare(); break;
+    case 8: quit=true; return;
+    default: printf("Critical error.\n"); break;
+  }
+  return;
+}
+
+void addWare(struct Ware *wares) {
+  printf("add ware initiated.\n");
+  struct Ware newWare;
+  newWare.price=2;
+  newWare.name="notnull";
+  extendArray(wares);
+  wares[length(wares)-1].price = 2;
+  strcpy(wares[length(wares)-1].name, "notnull");
+}
+
+void removeWare() {
+  
+}
+
+void extendArray(struct Ware *a){
+  
+  //struct ware *b = a
+
+}
+
+int scanSingleInt() {
+  fflush(stdout);
+  char a = getchar();
+  clearInput();
+  return (a-(int)'0');
+}
+
+void clearInput() {
+  fflush(stdout);
+  while (getchar()!='\n'){  fflush(stdout);}
+  return;
+}
+
+int length(const char** array) {
+  int count = 0;
+  while(array[count]) count++;
+  return count;
+}
+
+
+//git config credential.helper "cache"
+

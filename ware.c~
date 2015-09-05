@@ -1,0 +1,6 @@
+struct Ware
+{
+  char name[20];
+  int price;
+  char shelf[3];
+};

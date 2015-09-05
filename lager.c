@@ -1,53 +1,17 @@
-//C hello world example
+#include "lager.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-
-void welcome();
-void  menu();
-void addWare();
-void removeWare();
-void extendArray();
-int scanSingleInt();
-void clearInput();
-int countWares();
-
-struct Shelf {
-  char c;
-  int i;
-};
-struct Ware
-{
-  char name[20];
-  int price;
-  struct Shelf shelf;
-};
-
-
-  bool quit=false;
-int main()
-{
-  struct Ware wares[1]; //Array of all the wares.
-  wares[0].name[0]='0'; //Nullifying first and only element.
-
-  
-  fflush(stdout);
-  welcome();
-
-  while (quit==false) {
-    menu(wares);
-  }
-  return 0;
-}
+#include "lager.h"
+#include "ware.c"
 
 
 void welcome() {
   printf("Welcome to my storage thingy...\n");
-  fflush(stdout);
 }
 
-void menu(struct Ware *wares) {
+void menu(Ware *wares, bool *quit) {
   int answer = 8;
   printf("Select one alternative by entering one integer: ");
   answer = scanSingleInt();
@@ -57,28 +21,31 @@ void menu(struct Ware *wares) {
     answer = scanSingleInt();
   }
   switch (answer) {
-    case 1: addWare(wares); break;
+    case 1: addWare(&wares); break;
     case 2: removeWare(); break;
-    case 8: quit=true; return;
+    case 8: *quit=true; return;
     default: printf("Critical error.\n"); break;
   }
   return;
 }
 
-void addWare(struct Ware *wares) {
+void addWare(Ware **wares) {
   printf("add ware initiated.\n");
-  wares[countWares()].price = 2;
-  strcpy(wares[countWares()].name, "notnull");
+  int numElm =  length(*wares);
+  printf("The array is %d long. \n", numElm);
+  Ware *newArray=malloc(sizeof(Ware)*(numElm+1));
+  for (int i = 0; i<(numElm); ++i) {
+    newArray[i]=*wares[i];
+  }
+  Ware newWare;
+  newWare.price=2;
+  strcpy(newWare.name,"notnull");
+  newArray[numElm]=newWare;
+  *wares = newArray;
 }
 
 void removeWare() {
   
-}
-
-void extendArray(struct Ware *a){
-  
-  //struct ware *b = a
-
 }
 
 int scanSingleInt() {
@@ -93,12 +60,3 @@ void clearInput() {
   while (getchar()!='\n'){  fflush(stdout);}
   return;
 }
-
-int countWares(struct Ware wares[]) {
-  if (wares[0].name==NULL) return 0;
-  int i = 0;
-  for (i=0; wares[0].name==NULL; i++) {}
-  return i;
-}
-//git config credential.helper "cache"
-
