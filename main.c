@@ -8,12 +8,14 @@
 int main()
 {
   Ware *wares = 0; //Array of all the wares.
+  int *numElm = 0;
   bool quit=false;
   
   welcome();
 
   while (quit==false) {
-    menu(wares,&quit);
+    menu(wares,&quit,numElm);
+    //printf("In main it is %d \n",*numElm);
   }
   puts("Press enter to quit.");
   fflush(stdout);

@@ -5,13 +5,14 @@
 #include <string.h>
 #include "lager.h"
 #include "ware.c"
+//gcc -Wall -std=c11 main.c lager.c ware.c -o main
 
 
 void welcome() {
   printf("Welcome to my storage thingy...\n");
 }
 
-void menu(Ware *wares, bool *quit) {
+void menu(Ware *wares, bool *quit, int *numElm) {
   int answer = 8;
   printf("Select one alternative by entering one integer: ");
   answer = scanSingleInt();
@@ -21,7 +22,7 @@ void menu(Ware *wares, bool *quit) {
     answer = scanSingleInt();
   }
   switch (answer) {
-    case 1: addWare(&wares); break;
+    case 1: addWare(&wares, &numElm); break;
     case 2: removeWare(); break;
     case 8: *quit=true; return;
     default: printf("Critical error.\n"); break;
@@ -29,25 +30,41 @@ void menu(Ware *wares, bool *quit) {
   return;
 }
 
-void addWare(Ware **wares) {
+void addWare(Ware **wares, int *numElm) {
   printf("add ware initiated.\n");
-  int numElm =  length(*wares);
-  printf("The array is %d long. \n", numElm);
-  Ware *newArray=malloc(sizeof(Ware)*(numElm+1));
-  for (int i = 0; i<(numElm); ++i) {
-    newArray[i]=*wares[i];
+  printf("The array is %d long. \n", *numElm);
+  Ware *newArray= malloc(sizeof(Ware)*(*numElm+1));
+  for (int i = 0; i<*numElm; ++i) {
+    *((newArray)+1)= *((*wares)+i);
   }
   Ware newWare;
   newWare.price=2;
   strcpy(newWare.name,"notnull");
-  newArray[numElm]=newWare;
+  newArray[*numElm]=newWare;
   *wares = newArray;
+  ++*numElm;
+  printf("The arrat is NOW %d long. \n", *numElm);
 }
 
 void removeWare() {
   
 }
 
+void editWare() {
+
+}
+
+void undo () {
+
+}
+
+void printAll() {
+
+}
+
+void maybeQuit() {
+
+}
 int scanSingleInt() {
   fflush(stdout);
   char a = getchar();
@@ -59,4 +76,11 @@ void clearInput() {
   fflush(stdout);
   while (getchar()!='\n'){  fflush(stdout);}
   return;
+}
+
+void breakPoint() {
+  puts("Breakpoint!");
+  fflush(stdout);
+  getchar();
+  clearInput();
 }

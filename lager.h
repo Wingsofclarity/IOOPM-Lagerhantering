@@ -2,13 +2,16 @@
 #define LAGER_C_
 
 void welcome();
-void  menu();
+void menu();
 void addWare();
 void removeWare();
-void extendArray();
+void editWare();
+void undo();
+void printAll();
+void maybeQuit();
 int scanSingleInt();
 void clearInput();
 int countWares();
-int length();
+void breakPoint();
 
 #endif // LAGER_C_
