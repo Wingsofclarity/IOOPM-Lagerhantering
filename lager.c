@@ -24,6 +24,8 @@ void menu(Ware *wares, bool *quit, int *numElm) {
   switch (answer) {
     case 1: addWare(&wares, numElm); break;
     case 2: removeWare(); break;
+  case 3: editWare(); break;
+  case 4: printAll(); break;
     case 8: *quit=true; return;
     default: printf("Critical error.\n"); break;
   }
@@ -47,19 +49,29 @@ void addWare(Ware *wares, int *numElm) {
 }
 
 void removeWare() {
-  
+  puts("Removing your butt.");
 }
 
 void editWare() {
-
+  puts("Editing your butt.");
 }
 
 void undo () {
-
+  puts("Undone undo.");
 }
 
-void printAll() {
+void printAll(Ware *wares, int *numElm) {
+  printf("num elm is: %d\n",*numElm);
+  if (*numElm<=0) {
+    printf("There are no wares in the warehouse. :(\n");
+  }
+  /*for (int i = 0; i<*numElm; ++i) {
+    //printf("Ware %d: %s, %d öre, %s.", i, (*(wares+i)).name,20,"sdjk");
+    printf("Ware %d", (*(wares+1)).price);
+    }*/
+  
 
+  return;
 }
 
 void maybeQuit() {
