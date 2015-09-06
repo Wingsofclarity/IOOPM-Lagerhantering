@@ -7,13 +7,13 @@
 
 int main()
 {
-  Ware wares; //Array of all the wares.
+  Ware *wares=0; //Array of all the wares.
   int numElm = 0;
   bool quit=false;
   welcome();
 
   while (quit==false) {
-    menu(&wares,&quit,&numElm);
+    menu(wares,&quit,&numElm);
     //    fflush(stdout);
     //printf("Value of var[%d] = %d\n", i, *numElm );
     printf("In main it is %d \n",numElm);

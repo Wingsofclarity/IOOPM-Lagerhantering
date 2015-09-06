@@ -1,0 +1,19 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <string.h>
+//#include "point.h"
+//gcc -Wall point.c -o main
+
+int main () {
+  int *p=0;
+  int i=2;
+  //printf("%d\n", &p);
+  //  p=i;
+  p=&i;
+  //printf("%d\n", *p);
+  printf("%d\n", *p);
+  printf("%d\n", &p);
+  return 0;
+}
+

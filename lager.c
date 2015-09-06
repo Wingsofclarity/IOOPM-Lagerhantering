@@ -7,7 +7,6 @@
 #include "ware.c"
 //gcc -Wall -std=c11 main.c lager.c ware.c -o main
 
-
 void welcome() {
   printf("Welcome to my storage thingy...\n");
 }
@@ -22,10 +21,10 @@ void menu(Ware *wares, bool *quit, int *numElm) {
     answer = scanSingleInt();
   }
   switch (answer) {
-    case 1: addWare(&wares, numElm); break;
+    case 1: addWare(wares, numElm); break;
     case 2: removeWare(); break;
   case 3: editWare(); break;
-  case 4: printAll(); break;
+  case 4: printAll(wares, numElm); break;
     case 8: *quit=true; return;
     default: printf("Critical error.\n"); break;
   }
@@ -39,12 +38,13 @@ void addWare(Ware *wares, int *numElm) {
   for (int i = 0; i<*numElm; ++i) {
     *(newArray+i)=*(wares+i);
   }
+  printf("The arrat is NOW %d long. \n", *numElm);
   Ware newWare;
   newWare.price=2;
   strcpy(newWare.name,"notnull");
   newArray[*numElm]=newWare;
-  wares = &newArray;
-  ++*numElm;
+  wares = newArray;
+  *numElm = (*numElm)+1;
   printf("The arrat is NOW %d long. \n", *numElm);
 }
 
@@ -61,14 +61,15 @@ void undo () {
 }
 
 void printAll(Ware *wares, int *numElm) {
-  printf("num elm is: %d\n",*numElm);
+  //  printf("num elm is: %d\n",numElm);
   if (*numElm<=0) {
     printf("There are no wares in the warehouse. :(\n");
+    return;
   }
-  /*for (int i = 0; i<*numElm; ++i) {
+  for (int i = 0; i<*numElm && i<20 ; ++i) {
     //printf("Ware %d: %s, %d öre, %s.", i, (*(wares+i)).name,20,"sdjk");
-    printf("Ware %d", (*(wares+1)).price);
-    }*/
+    printf("Ware %d: ", (*(wares+1)).price);
+  }
   
 
   return;

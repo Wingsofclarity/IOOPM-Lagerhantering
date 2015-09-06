@@ -43,7 +43,7 @@ void addWare(Ware *wares, int *numElm) {
   newWare.price=2;
   strcpy(newWare.name,"notnull");
   newArray[*numElm]=newWare;
-  wares = &newArray;
+  *wares = *newArray;
   ++*numElm;
   printf("The arrat is NOW %d long. \n", *numElm);
 }
@@ -61,12 +61,14 @@ void undo () {
 }
 
 void printAll(Ware *wares, int *numElm) {
+  printf("num elm is: %d\n",*numElm);
   if (*numElm<=0) {
     printf("There are no wares in the warehouse. :(\n");
+    return;
   }
-  for (int i = 0; i<*numElm; ++i) {
-    printf("Ware %d: %s, %d öre, %s.", i, (*(wares+i)).name,20,"sdjk");
-
+  for (int i = 0; i<*numElm && i<20 ; ++i) {
+    //printf("Ware %d: %s, %d öre, %s.", i, (*(wares+i)).name,20,"sdjk");
+    printf("Ware %d", (*(wares+1)).price);
   }
   
 
