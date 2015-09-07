@@ -3,21 +3,18 @@
 #include <stdbool.h>
 #include <string.h>
 #include "lager.h"
-#include "ware.c"
+#include "ware.h"
 
 int main()
 {
-  Ware wares; //Array of all the wares.
+  Ware *wares; //Array of all the wares.
   int numElm = 0;
   bool quit=false;
   welcome();
 
   while (quit==false) {
-    menu(&wares,&quit,&numElm);
-    //    fflush(stdout);
-    //printf("Value of var[%d] = %d\n", i, *numElm );
+    menu(wares,&quit,&numElm);
     printf("In main it is %d \n",numElm);
-    //    puts("sdkj");
   }
   puts("Press enter to quit.");
   fflush(stdout);

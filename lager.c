@@ -14,7 +14,7 @@ void menu(Ware *wares, bool *quit, int *numElm) {
   int answer = 8;
   printf("Select one alternative by entering one integer: ");
   answer = scanSingleInt();
-  while (answer<0 || answer>8) {
+  while (answer<=0 || answer>8) {
     printf("Invalid entry.\n");
     printf("Select one alternative by entering one integer: ");
     answer = scanSingleInt();
@@ -32,15 +32,17 @@ void menu(Ware *wares, bool *quit, int *numElm) {
 
 void addWare(Ware **wares, int *numElm) {
   printf("add ware initiated.\n");
-  Ware *newArray= malloc(sizeof(Ware)*(*numElm+1));
-  for (int i = 0; i<*numElm; ++i) {
-    //    *(newArray+i)=**(wares+i);
-    }
+  Ware *newArray= malloc(sizeof(Ware)*(*numElm+1)); //Allocating space for new array.
+  for (int i = 0; i<*numElm; ++i) { //Copying data from old to new
+    *(newArray+i)=**(wares+i); 
+  }
   Ware newWare;
-  newWare.price=2;
+  newWare.price=2; //TODO Cheat to test other functions.
+  printf("Price: %d\n", newWare.price);
   strcpy(newWare.name,"notnull");
-  newArray[*numElm]=newWare;
-  *wares = newArray;
+  *(newArray+*numElm)=newWare; //The new ware is copied into the new array
+  printf("Price: %d\n",*(newArray+*numElm));
+  *wares = newArray; //The pointer is set to point to the new array.
   *numElm = (*numElm)+1;
 }
 
@@ -57,23 +59,22 @@ void undo () {
 }
 
 void printAll(Ware *wares, int *numElm) {
-  printf("num elm is: %d\n", *numElm);
   if (*numElm<=0) {
     printf("There are no wares in the warehouse. :(\n");
     return;
   }
-  /*  for (int i = 0; i<*numElm && i<20 ; ++i) {
-    printf("The price of the d
-    }*/
-  printf(":D : %d \n", (*wares).price);
+  for (int i = 0; i<*numElm && i<20 ; ++i) {
+    printf("The price of the ware is: %d \n", (*wares).price);
+  }
   return;
 }
 
 void maybeQuit() {
 
 }
+
 int scanSingleInt() {
-  fflush(stdout);
+  fflush(stdout); //Without this it crashesh on windows....
   char a = getchar();
   clearInput();
   return (a-(int)'0');
@@ -83,11 +84,5 @@ void clearInput() {
   fflush(stdout);
   while (getchar()!='\n'){  fflush(stdout);}
   return;
-}
-
-void breakPoint() {
-  puts("Breakpoint!");
-  fflush(stdout);
-  getchar();
-  clearInput();
+  //TODO If only '\n' is sent in this function is no good.
 }

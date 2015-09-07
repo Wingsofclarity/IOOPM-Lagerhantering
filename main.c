@@ -7,20 +7,16 @@
 
 int main()
 {
-  Ware *wares=0; //Array of all the wares.
-  int numElm = 0;
+  Ware *wares; //Array of all the wares. Uninitilazed gives warning...crashes if initialzed.
+  int numElm = 0; //Number of element in wares.
   bool quit=false;
-  welcome();
   
-  while (quit==false) {
+  welcome();
+  while (quit==false) { //Main loop
     menu(wares,&quit,&numElm);
-    //    fflush(stdout);
-    //printf("Value of var[%d] = %d\n", i, *numElm );
-    printf("In main it is %d \n",numElm);
-    //    puts("sdkj");
   }
   puts("Press enter to quit.");
-  fflush(stdout);
+  fflush(stdout); 
   getchar();
   return 0;
 }
