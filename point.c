@@ -5,6 +5,19 @@
 //#include "point.h"
 //gcc -Wall point.c -o main
 
+struct potis {
+  int a;
+};
+
+int main () {
+  struct potis pot;
+  pot.a=2;
+  printf("%d\n", pot.a);
+  struct potis *ptr;
+  (*ptr).
+  return 0;
+}
+/*
 void f(int **a) {
   int *b = malloc(sizeof(int));
   *b = 1;
@@ -24,3 +37,4 @@ int main () {
   return 0;
 }
 
+*/

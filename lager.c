@@ -1,10 +1,9 @@
-#include "lager.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
 #include "lager.h"
-#include "ware.c"
+#include "ware.h"
 //gcc -Wall -std=c11 main.c lager.c ware.c -o main
 
 void welcome() {
@@ -21,7 +20,7 @@ void menu(Ware *wares, bool *quit, int *numElm) {
     answer = scanSingleInt();
   }
   switch (answer) {
-    case 1: addWare(wares, numElm); break;
+    case 1: addWare(&wares, numElm); break;
     case 2: removeWare(); break;
   case 3: editWare(); break;
   case 4: printAll(wares, numElm); break;
@@ -31,21 +30,18 @@ void menu(Ware *wares, bool *quit, int *numElm) {
   return;
 }
 
-void addWare(Ware *wares, int *numElm) {
+void addWare(Ware **wares, int *numElm) {
   printf("add ware initiated.\n");
-  printf("The array is %d long. \n", *numElm);
   Ware *newArray= malloc(sizeof(Ware)*(*numElm+1));
   for (int i = 0; i<*numElm; ++i) {
-    *(newArray+i)=*(wares+i);
-  }
-  printf("The arrat is NOW %d long. \n", *numElm);
+    //    *(newArray+i)=**(wares+i);
+    }
   Ware newWare;
   newWare.price=2;
   strcpy(newWare.name,"notnull");
   newArray[*numElm]=newWare;
-  wares = newArray;
+  *wares = newArray;
   *numElm = (*numElm)+1;
-  printf("The arrat is NOW %d long. \n", *numElm);
 }
 
 void removeWare() {
@@ -61,17 +57,15 @@ void undo () {
 }
 
 void printAll(Ware *wares, int *numElm) {
-  //  printf("num elm is: %d\n",numElm);
+  printf("num elm is: %d\n", *numElm);
   if (*numElm<=0) {
     printf("There are no wares in the warehouse. :(\n");
     return;
   }
-  for (int i = 0; i<*numElm && i<20 ; ++i) {
-    //printf("Ware %d: %s, %d öre, %s.", i, (*(wares+i)).name,20,"sdjk");
-    printf("Ware %d: ", (*(wares+1)).price);
-  }
-  
-
+  /*  for (int i = 0; i<*numElm && i<20 ; ++i) {
+    printf("The price of the d
+    }*/
+  printf(":D : %d \n", (*wares).price);
   return;
 }
 

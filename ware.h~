@@ -1,0 +1,7 @@
+#ifndef LAGER_C_   /* Include guard */
+#define LAGER_C_
+
+String getName()
+
+
+#endif // LAGER_C_

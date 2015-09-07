@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "lager.h"
-#include "ware.c"
+#include "ware.h"
 
 int main()
 {
@@ -11,7 +11,7 @@ int main()
   int numElm = 0;
   bool quit=false;
   welcome();
-
+  
   while (quit==false) {
     menu(wares,&quit,&numElm);
     //    fflush(stdout);
