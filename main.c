@@ -14,7 +14,6 @@ int main()
   welcome();
   while (quit==false) { //Main loop
     menu(&wares,&quit,&numElm);
-    printf("Adress of interest main: %x \n", wares);
   }
   puts("Press enter to quit.");
   fflush(stdout); 
