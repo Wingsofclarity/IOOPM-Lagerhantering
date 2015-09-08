@@ -8,12 +8,8 @@
 int main()
 {
   Ware *wares; //Array of all the wares. Uninitilazed gives warning...crashes if initialzed.
-  Ware w;
   int numElm = 0; //Number of element in wares.
   bool quit=false;
-
-  //Example code
-  (Ware) w = (Ware) {.price=30};
   
   welcome();
   while (quit==false) { //Main loop
