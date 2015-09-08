@@ -64,7 +64,8 @@ void printAll(Ware *wares, int *numElm) {
     return;
   }
   for (int i = 0; i<*numElm && i<20 ; ++i) {
-    printf("The price of the ware is: %d \n", (*wares).price);
+    printf("Ware '%s' costs '%d' and is at '%s'.\n", (*(wares+i)).name,(*(wares+i)).price,(*(wares+i)).loc);
+    //    printf("The price of the ware is: %d \n", (*wares).price);
   }
   return;
 }

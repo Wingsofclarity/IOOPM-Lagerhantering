@@ -7,17 +7,20 @@
 
 int main()
 {
-  Ware *wares; //Array of all the wares.
-  int numElm = 0;
+  Ware *wares; //Array of all the wares. Uninitilazed gives warning...crashes if initialzed.
+  Ware w;
+  int numElm = 0; //Number of element in wares.
   bool quit=false;
-  welcome();
 
-  while (quit==false) {
+  //Example code
+  (Ware) w = (Ware) {.price=30};
+  
+  welcome();
+  while (quit==false) { //Main loop
     menu(wares,&quit,&numElm);
-    printf("In main it is %d \n",numElm);
   }
   puts("Press enter to quit.");
-  fflush(stdout);
+  fflush(stdout); 
   getchar();
   return 0;
 }
