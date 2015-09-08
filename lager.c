@@ -58,14 +58,16 @@ void undo () {
   puts("Undone undo.");
 }
 
-void printAll(Ware *wares, int *numElm) {
-  if (*numElm<=0) {
+void printAll(Ware *wares, int *numElm) {//(Currently won't print more than 20 wares.
+  if (*numElm<=0) { //If warehous is empty
     printf("There are no wares in the warehouse. :(\n");
     return;
   }
   for (int i = 0; i<*numElm && i<20 ; ++i) {
-    printf("Ware '%s' costs '%d' and is at '%s'.\n", (*(wares+i)).name,(*(wares+i)).price,(*(wares+i)).loc);
-    //    printf("The price of the ware is: %d \n", (*wares).price);
+    printf("Ware '%s' costs '%d' and is at '%s'.\n",
+	   (*(wares+i)).name,
+	   (*(wares+i)).price,
+	   (*(wares+i)).loc);
   }
   return;
 }
