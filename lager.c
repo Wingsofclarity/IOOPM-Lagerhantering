@@ -6,11 +6,12 @@
 #include "ware.h"
 //gcc -Wall -std=c11 main.c lager.c ware.c -o main
 
+
 void welcome() {
   printf("Welcome to my storage thingy...\n");
 }
 
-void menu(Ware **wares, bool *quit, int *numElm) {
+void menu(db_t *db, bool *quit, int *numElm) {
 
   int answer = 8;
   printf("Select one alternative by entering one integer: ");
@@ -23,41 +24,44 @@ void menu(Ware **wares, bool *quit, int *numElm) {
   }
   
   switch (answer) {
-    case 1: addWare(wares, numElm); break;
-  case 2: removeWare(wares, numElm); break;
+    case 1: addWare(db, numElm); break;
+  case 2: removeWare(db, numElm); break;
     case 3: editWare(); break;
-    case 4: printAll(*wares, numElm); break;
+    case 4: printAll(db, numElm); break;
     case 8: *quit=true; return;
     default: printf("Critical error.\n"); break;
   }
   return;
 }
 
-void addWare(Ware **wares, int *numElm) {
-  printf("Add ware initiated.\n");
-  Ware *newArray=(Ware *)  malloc(sizeof(Ware)*(*numElm+1)); //Allocating space for new array.
-  for (int i = 0; i<*numElm; ++i) { //Copying data from old to new
-     *(newArray+i)=*(*wares+i); 
+
+void addWare(db_t *db) {
+  if (db->numElm>=db->size) {
+    printf("Reallocating space!\n");
+    db->size+=db->chunk;
+    db->wares = realloc(db->wares, sizeof(Ware)*(db->size));
   }
-  free(*wares);
   
   Ware newWare;
-  
-  //TODO Fix proper input.
   newWare.price=2; 
   strcpy(newWare.name,"notnull");
-  
-  *(newArray+*numElm)=newWare; //The new ware is copied into the new array
+  strcpy(newWare.loc,"A31");
 
-  *wares = newArray; //The pointer is set to point to the new array.
-
-  *numElm = (*numElm)+1;
+  db->wares[db->numElm] = newWare;
+  ++db->numElm;
 }
 
-void removeWare(Ware **wares, int *numElm) {
-  puts("Removing your butt.");
-  *wares= (Ware *)  realloc(*wares, sizeof(Ware)*(*numElm-1)); //Freeing space.
-  *numElm=*numElm-1;
+void removeWare(db_t *db) {
+  if (db->numElm<=0) {
+    printf("Warehouse already empty.\n");
+    return;
+  }
+  --db->numElm;
+  if ((db->size)-(db->numElm)>=db->chunk) {
+    db->size=db->size-db->chunk;
+    db->wares = realloc(db->wares, sizeof(Ware)*(db->size)); 
+  }
+
 }
 
 void editWare() {
@@ -69,22 +73,38 @@ void undo () {
   puts("Undone undo.");
 }
 
-void printAll(Ware *wares, int *numElm) {//(Currently won't print more than 20 wares.
-  if (*numElm<=0) { //If warehous is empty
+void printAll(db_t *db) {//(Currently won't print more than 20 wares.
+  if (db->numElm<=0) { //If warehous is empty
     printf("There are no wares in the warehouse. :(\n");
     return;
   }
-  for (int i = 0; i<*numElm && i<20 ; ++i) {
+  for (int i = 0; i<db->numElm && i<20 ; ++i) {
     printf("Ware '%s' costs '%d' and is at '%s'.\n",
-	   wares[i].name,
-	   wares[i].price,
-	   wares[i].loc);
+	   db->wares[i].name,
+	   db->wares[i].price,
+	   db->wares[i].loc);
   }
   return;
 }
 
 void maybeQuit() {
   
+}
+
+char *inputString() {
+ //Without this it crashesh on windows....
+  char *a = malloc(20*sizeof(char));
+  char c;
+  int i = 0;
+  do  {
+    fflush(stdout);
+    c = getchar();
+    a[i]=c;
+    ++i;
+  } while (c!='\n' && i<18);
+  a[i]='\n';
+  clearInput();
+  return a;
 }
 
 int scanSingleInt() {

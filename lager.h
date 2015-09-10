@@ -9,6 +9,7 @@ void editWare();
 void undo();
 void printAll();
 void maybeQuit();
+char* inputString();
 int scanSingleInt();
 void clearInput();
 int countWares();
