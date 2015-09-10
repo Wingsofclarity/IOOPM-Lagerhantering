@@ -72,6 +72,10 @@ void printAll(Ware *wares, int *numElm) {//(Currently won't print more than 20 w
     return;
   }
   for (int i = 0; i<*numElm && i<20 ; ++i) {
+    /*    printf("Ware '%s' costs '%d' and is at '%s'.\n",
+	   (*(wares+i)).name,
+	   (*(wares+i)).price,
+	   (*(wares+i)).loc);*/
     printf("Ware '%s' costs '%d' and is at '%s'.\n",
 	   (*(wares+i)).name,
 	   (*(wares+i)).price,

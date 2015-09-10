@@ -5,9 +5,8 @@
 #include "lager.h"
 #include "ware.h"
 
-int main()
-{
-  Ware *wares=0; //Array of all the wares. Uninitilazed gives warning...crashes if initialzed.
+int main(){
+  Ware *wares=0; //Array of all the wares.
   int numElm = 0; //Number of element in wares.
   bool quit=false;
   

@@ -7,13 +7,13 @@
 
 int main()
 {
-  Ware *wares; //Array of all the wares. Uninitilazed gives warning...crashes if initialzed.
+  Ware *wares=0; //Array of all the wares. Uninitilazed gives warning...crashes if initialzed.
   int numElm = 0; //Number of element in wares.
   bool quit=false;
   
   welcome();
   while (quit==false) { //Main loop
-    menu(wares,&quit,&numElm);
+    menu(&wares,&quit,&numElm);
   }
   puts("Press enter to quit.");
   fflush(stdout); 
