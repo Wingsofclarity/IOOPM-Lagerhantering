@@ -24,7 +24,7 @@ void menu(Ware **wares, bool *quit, int *numElm) {
   
   switch (answer) {
     case 1: addWare(wares, numElm); break;
-    case 2: removeWare(); break;
+  case 2: removeWare(wares, numElm); break;
     case 3: editWare(); break;
     case 4: printAll(*wares, numElm); break;
     case 8: *quit=true; return;
@@ -54,12 +54,15 @@ void addWare(Ware **wares, int *numElm) {
   *numElm = (*numElm)+1;
 }
 
-void removeWare() {
+void removeWare(Ware **wares, int *numElm) {
   puts("Removing your butt.");
+  *wares= (Ware *)  realloc(*wares, sizeof(Ware)*(*numElm-1)); //Freeing space.
+  *numElm=*numElm-1;
 }
 
 void editWare() {
   puts("Editing your butt.");
+  
 }
 
 void undo () {
@@ -73,15 +76,15 @@ void printAll(Ware *wares, int *numElm) {//(Currently won't print more than 20 w
   }
   for (int i = 0; i<*numElm && i<20 ; ++i) {
     printf("Ware '%s' costs '%d' and is at '%s'.\n",
-	   (*(wares+i)).name,
-	   (*(wares+i)).price,
-	   (*(wares+i)).loc);
+	   wares[i].name,
+	   wares[i].price,
+	   wares[i].loc);
   }
   return;
 }
 
 void maybeQuit() {
-
+  
 }
 
 int scanSingleInt() {

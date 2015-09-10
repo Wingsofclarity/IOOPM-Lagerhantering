@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-//TODO move struct definition in here'
+//TODO move struct definition in here
 
 char* getName(Ware w) {
   return w.name; //TODO Gives warnging
