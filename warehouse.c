@@ -31,3 +31,15 @@ void setSize(db_t *db, int a) {
 void setChunk(db_t *db, int a) {
   db->chunk=a;
 }
+
+int findWare(db_t *db, char *s) {
+  for (int i = 0; i<db->numElm; ++i) {
+    if (strcmp(getName(db->wares+i),s)==-1) {
+      printf("%d", strcmp(getName(db->wares+i),s));
+      printf("Found %s", getName(db->wares+i));
+      printf("Found it at %d\n",i);
+      return i;
+    }
+  }
+  return (-1);
+}

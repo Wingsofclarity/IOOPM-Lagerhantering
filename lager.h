@@ -14,5 +14,6 @@ int getFirstNum();
 void clearInput();
 int countWares();
 void breakPoint();
+void quickAdd();
 
 #endif // LAGER_C_

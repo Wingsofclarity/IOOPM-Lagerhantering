@@ -10,7 +10,7 @@ void undo();
 void printAll();
 void maybeQuit();
 char* inputString();
-int scanSingleInt();
+int getFirstNum();
 void clearInput();
 int countWares();
 void breakPoint();

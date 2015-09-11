@@ -32,10 +32,11 @@ void menu(db_t *db, bool *quit, int *numElm) {
   }
   
   switch (answer) {
-    case 1: addWare(db, numElm); break;
-    case 2: removeWare(db, numElm); break;
+    case 1: addWare(db); break;
+    case 2: removeWare(db); break;
     case 3: editWare(); break;
-    case 4: printAll(db, numElm); break;
+    case 4: printAll(db); break;
+  case 7: quickAdd(db); break;
     case 8: *quit=true; return;
     default: printf("Critical error.\n"); break;
   }
@@ -74,6 +75,13 @@ void removeWare(db_t *db) {
   if (db->numElm<=0) {
     printf("Warehouse already empty.\n");
     return;
+  }
+  char *answerPtr = inputString();
+  int a = findWare(db,answerPtr);
+  free(answerPtr);
+  for (int i = a; i<(db->numElm)-1; ++i) {
+    db->wares[i]=db->wares[i+1];
+    
   }
   --db->numElm;
   if ((db->size)-(db->numElm)>=db->chunk) {
@@ -118,12 +126,11 @@ char *inputString() {
   while (true){
     fflush(stdout);
     c = getchar();
-    //    printf("I read %c \n", c);
     if (c=='\n') {
       return a;
     }
     else if (i>=19) {
-      a[i+1] = '\n';
+      a[i] = '\0';
       clearInput();
       return a;
     }
@@ -148,4 +155,28 @@ void clearInput() {
   while (getchar()!='\n'){  fflush(stdout);}
   return;
   //TODO If only '\n' is sent in this function is no good.
+}
+
+
+void quickAdd(db_t *db) {
+   if (db->numElm>=db->size) {
+    printf("Reallocating space!\n");
+    db->size+=db->chunk;
+    db->wares = realloc(db->wares, sizeof(Ware)*(db->size));
+  }
+  
+  Ware newWare;
+
+  char a = db->numElm + '0';
+  char answerPtr[6] = {'W','a','r','e',a,'\0'};
+  setName(&newWare, answerPtr);
+  
+  int price = 0;
+  setPrice(&newWare, price);
+
+  char location[4] = {'l','o','c','\0'};
+  setLoc(&newWare,location);
+
+  db->wares[db->numElm] = newWare;
+  ++db->numElm;
 }

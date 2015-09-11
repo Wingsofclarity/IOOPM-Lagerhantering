@@ -16,5 +16,6 @@ int getChunk(db_t*);
 void setNumElm(db_t*, int);
 void setSize(db_t*, int);
 void setChunk(db_t*, int);
+int findWare(db_t*,char*);
 
 #endif
