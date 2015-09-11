@@ -3,96 +3,144 @@
 #include <stdbool.h>
 #include <string.h>
 #include "lager.h"
+#include "warehouse.h"
 #include "ware.h"
-//gcc -Wall -std=c11 main.c lager.c ware.c -o main
+//gcc -Wall -std=c11 main.c lager.c ware.c warehouse.c -o main
+
 
 void welcome() {
   printf("Welcome to my storage thingy...\n");
 }
 
-void menu(Ware **wares, bool *quit, int *numElm) {
+void menu(db_t *db, bool *quit, int *numElm) {
 
-  int answer = 8;
+  char *answerPtr = 0;
+  int answer=0;
   printf("Select one alternative by entering one integer: ");
-  answer = scanSingleInt();
+  
+  answerPtr = inputString();
+  answer = getFirstNum(answerPtr);
+  free(answerPtr);
   
   while (answer<=0 || answer>8) {//Checking if choice is avaible.
     printf("Invalid entry.\n");
     printf("Select one alternative by entering one integer: ");
-    answer = scanSingleInt();
+    answerPtr = inputString();
+    answer = getFirstNum(answerPtr);
+    free(answerPtr);
+    
   }
   
   switch (answer) {
-    case 1: addWare(wares, numElm); break;
-    case 2: removeWare(); break;
+    case 1: addWare(db, numElm); break;
+    case 2: removeWare(db, numElm); break;
     case 3: editWare(); break;
-    case 4: printAll(*wares, numElm); break;
+    case 4: printAll(db, numElm); break;
     case 8: *quit=true; return;
     default: printf("Critical error.\n"); break;
   }
   return;
 }
 
-void addWare(Ware **wares, int *numElm) {
-  printf("Add ware initiated.\n");
-  Ware *newArray=(Ware *)  malloc(sizeof(Ware)*(*numElm+1)); //Allocating space for new array.
-  for (int i = 0; i<*numElm; ++i) { //Copying data from old to new
-     *(newArray+i)=*(*wares+i); 
+
+void addWare(db_t *db) {
+  if (db->numElm>=db->size) {
+    printf("Reallocating space!\n");
+    db->size+=db->chunk;
+    db->wares = realloc(db->wares, sizeof(Ware)*(db->size));
   }
-  free(*wares);
   
   Ware newWare;
-  
-  //TODO Fix proper input.
-  newWare.price=2; 
-  strcpy(newWare.name,"notnull");
-  
-  *(newArray+*numElm)=newWare; //The new ware is copied into the new array
 
-  *wares = newArray; //The pointer is set to point to the new array.
+  
+  char *answerPtr = inputString();
+  setName(&newWare, answerPtr);
+  free(answerPtr);
 
-  *numElm = (*numElm)+1;
+  answerPtr = inputString();
+  int price = getFirstNum(answerPtr);
+  setPrice(&newWare, price);
+  free(answerPtr);
+  
+  answerPtr = inputString();
+  setLoc(&newWare, answerPtr);
+  free(answerPtr);
+
+  db->wares[db->numElm] = newWare;
+  ++db->numElm;
 }
 
-void removeWare() {
-  puts("Removing your butt.");
+void removeWare(db_t *db) {
+  if (db->numElm<=0) {
+    printf("Warehouse already empty.\n");
+    return;
+  }
+  --db->numElm;
+  if ((db->size)-(db->numElm)>=db->chunk) {
+    db->size=db->size-db->chunk;
+    db->wares = realloc(db->wares, sizeof(Ware)*(db->size)); 
+  }
+
 }
 
 void editWare() {
   puts("Editing your butt.");
+  
 }
 
 void undo () {
   puts("Undone undo.");
 }
 
-void printAll(Ware *wares, int *numElm) {//(Currently won't print more than 20 wares.
-  if (*numElm<=0) { //If warehous is empty
+void printAll(db_t *db) {//(Currently won't print more than 20 wares.
+  if (db->numElm<=0) { //If warehous is empty
     printf("There are no wares in the warehouse. :(\n");
     return;
   }
-  for (int i = 0; i<*numElm && i<20 ; ++i) {
-    /*    printf("Ware '%s' costs '%d' and is at '%s'.\n",
-	   (*(wares+i)).name,
-	   (*(wares+i)).price,
-	   (*(wares+i)).loc);*/
+  for (int i = 0; i<db->numElm && i<20 ; ++i) {
     printf("Ware '%s' costs '%d' and is at '%s'.\n",
-	   (*(wares+i)).name,
-	   (*(wares+i)).price,
-	   (*(wares+i)).loc);
+	   db->wares[i].name,
+	   db->wares[i].price,
+	   db->wares[i].loc);
   }
   return;
 }
 
 void maybeQuit() {
-
+  
 }
 
-int scanSingleInt() {
-  fflush(stdout); //Without this it crashesh on windows....
-  char a = getchar();
-  clearInput();
-  return (a-(int)'0');
+char *inputString() {
+
+  char *a = malloc(20*sizeof(char));
+  char c;
+  int i = 0;
+  while (true){
+    fflush(stdout);
+    c = getchar();
+    //    printf("I read %c \n", c);
+    if (c=='\n') {
+      return a;
+    }
+    else if (i>=19) {
+      a[i+1] = '\n';
+      clearInput();
+      return a;
+    }
+    a[i]=c;
+    ++i;
+  }
+  return a;
+}
+
+int getFirstNum(char *s) {
+  for (int i = 0; s[i]!='\n'; ++i) {
+    if (s[i]>=(int)'0' && s[i]<=(int) '9') {
+      return s[i] - (int) '0';
+    }
+  }
+  printf("Critical error in getNum\n");
+  return 0;
 }
 
 void clearInput() {

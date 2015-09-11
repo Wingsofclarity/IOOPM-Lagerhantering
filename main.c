@@ -3,16 +3,19 @@
 #include <stdbool.h>
 #include <string.h>
 #include "lager.h"
-#include "ware.h"
+#include "warehouse.h"
 
-int main(){
-  Ware *wares=0; //Array of all the wares.
+int main()
+{
+
   int numElm = 0; //Number of element in wares.
   bool quit=false;
   
+  db_t db = { .chunk = 16 };
+
   welcome();
   while (quit==false) { //Main loop
-    menu(&wares,&quit,&numElm);
+    menu(&db,&quit,&numElm);
   }
   puts("Press enter to quit.");
   fflush(stdout); 

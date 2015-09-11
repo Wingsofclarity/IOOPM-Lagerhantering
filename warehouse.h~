@@ -1,0 +1,12 @@
+#ifndef WAREHOUSE_H_
+#define WAREHOUSE_H_
+
+
+typedef struct databas {
+  Ware *wares;
+  int numElm;
+  int size;
+  int chunk;
+}db_t;
+
+#endif
