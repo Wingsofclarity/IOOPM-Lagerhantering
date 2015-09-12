@@ -77,6 +77,7 @@ void removeWare(db_t *db) {
     return;
   }
   char *answerPtr = inputString();
+  printf("In removeWare it is %s\n",answerPtr);
   int a = findWare(db,answerPtr);
   free(answerPtr);
   for (int i = a; i<(db->numElm)-1; ++i) {
@@ -109,7 +110,7 @@ void printAll(db_t *db) {//(Currently won't print more than 20 wares.
     printf("Ware '%s' costs '%d' and is at '%s'.\n",
 	   db->wares[i].name,
 	   db->wares[i].price,
-	   db->wares[i].loc);
+	   getLoc(&db->wares[i]));
   }
   return;
 }
@@ -127,6 +128,7 @@ char *inputString() {
     fflush(stdout);
     c = getchar();
     if (c=='\n') {
+      a[i]='\0';
       return a;
     }
     else if (i>=19) {
