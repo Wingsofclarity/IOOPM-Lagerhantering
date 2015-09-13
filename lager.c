@@ -12,7 +12,7 @@ void welcome() {
   printf("Welcome to my storage thingy...\n");
 }
 
-void menu(db_t *db, bool *quit, int *numElm) {
+void menu(db_t *db, bool *quit, int *numElm, db_t *oldDB) {
 
   char *answerPtr = 0;
   int answer=0;
@@ -32,11 +32,12 @@ void menu(db_t *db, bool *quit, int *numElm) {
   }
   
   switch (answer) {
-    case 1: addWare(db); break;
+    case 1: *oldDB = *db; addWare(db); break;
     case 2: removeWare(db); break;
     case 3: editWare(); break;
     case 4: printAll(db); break;
-  case 7: quickAdd(db); break;
+    case 5: undo(&db,&oldDB); break;
+    case 7: quickAdd(db); break;
     case 8: *quit=true; return;
     default: printf("Critical error.\n"); break;
   }
@@ -97,8 +98,12 @@ void editWare() {
   
 }
 
-void undo () {
+void undo (db_t **db, db_t **oldDB) {
   puts("Undone undo.");
+  db_t  *temp = *db;
+  *db = *oldDB;
+  *oldDB = temp;
+  
 }
 
 void printAll(db_t *db) {//(Currently won't print more than 20 wares.

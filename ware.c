@@ -52,6 +52,7 @@ void setLoc(Ware *w, char *s) {
   }
   else out[2]=s[2];
   printf("Out is %s \n", out);
+  out[3] = '\0';
   strcpy(w->loc, out);
 }
 

@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include "lager.h"
-#include "ware.h"
+#include "warehouse.h"
 
 int main()
 {

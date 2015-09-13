@@ -12,10 +12,11 @@ int main()
   bool quit=false;
   
   db_t db = { .chunk = 16 };
+  db_t oldDB = db;
 
   welcome();
   while (quit==false) { //Main loop
-    menu(&db,&quit,&numElm);
+    menu(&db,&quit,&numElm, &oldDB);
   }
   puts("Press enter to quit.");
   fflush(stdout); 
