@@ -32,14 +32,41 @@ void menu(db_t *db, bool *quit, int *numElm, db_t *oldDB) {
   }
   
   switch (answer) {
-    case 1: *oldDB = *db; addWare(db); break;
-    case 2: removeWare(db); break;
-    case 3: editWare(); break;
-    case 4: printAll(db); break;
-    case 5: undo(db,oldDB); break;
-    case 7: quickAdd(db); break;
-    case 8: *quit=true; return;
-    default: printf("Critical error.\n"); break;
+  case 1: 
+    *oldDB = *db;
+    addWare(db); 
+    break;
+
+  case 2:
+    *oldDB = *db;
+    removeWare(db);
+    break;
+
+  case 3: 
+    *oldDB = *db;
+    editWare(); 
+    break;
+
+  case 4: 
+    printAll(db);
+    break;
+
+  case 5: 
+    undo(db,oldDB); 
+    break;
+
+  case 7:
+    *oldDB = *db;
+    quickAdd(db);
+    break;
+
+  case 8:
+    *quit=true;
+    return;
+
+  default: 
+    printf("Critical error.\n");
+    break;
   }
   return;
 }

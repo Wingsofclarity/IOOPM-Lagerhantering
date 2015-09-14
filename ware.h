@@ -1,5 +1,6 @@
 #ifndef WARE_H_  /* Include guard */
 #define WARE_H_
+#include <stdbool.h>
 
 
 typedef struct WareTag Ware;

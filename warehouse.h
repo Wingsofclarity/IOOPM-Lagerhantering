@@ -1,6 +1,7 @@
 #ifndef WAREHOUSE_H_
 #define WAREHOUSE_H_
 #include "ware.h"
+#include <stdbool.h>
 
 
 typedef struct databas {
