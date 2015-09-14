@@ -140,17 +140,27 @@ void editWare(db_t *db) {
   free(answerPtr);
   switch (answer) {
   case 1:
+    printf("Enter the new name:");
     answerPtr = inputString();
     setName(getWare(db,index),answerPtr);
     free(answerPtr);
     break;
 
   case 2:
+    printf("The old price is %d. Enter the new price:",getPrice(getWare(db,index)));
+    answerPtr = inputString();
+    int price = getFirstNum(answerPtr);
+    setPrice(getWare(db,index),price);
+    free(answerPtr);
+    break;
+
+  case 3:
+    printf("The old price is %d. Enter the new price:",getPrice(getWare(db,index)));
     break;
     
     }
 
-  
+  puts("Ware edited.");
 }
 
 void undo (db_t *db, db_t *oldDB) {

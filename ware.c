@@ -1,6 +1,7 @@
 #include "ware.h"
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 
 char* getName(Ware *w) {

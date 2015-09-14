@@ -1,5 +1,6 @@
 #ifndef WARE_H_  /* Include guard */
 #define WARE_H_
+#include <stdbool.h>
 
 
 typedef struct WareTag Ware;
@@ -10,19 +11,17 @@ typedef struct WareTag
   char loc[3];
 }Ware;
 
-typedef struct databas {
-  Ware *wares;
-  int numElm;
-  int size;
-  int chunk;
-}db_t;
-
 
 //struct WareTag;
 
 char* getName(Ware*);
 int getPrice(Ware*);
 char* getLoc(Ware*);
+
+void setName(Ware*, char*);
+void setPrice(Ware*, int);
+void setLoc(Ware*, char*);
+void setWare(Ware*, char*, int, char*);
 
 
 #endif // WARE_C_

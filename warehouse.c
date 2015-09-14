@@ -16,8 +16,8 @@ int getChunk(db_t *db) {
   return  db->chunk;
 }
 
-Ware getWare(db_t *db, int i) {
-  return db->wares[i];
+Ware* getWare(db_t *db, int i) {
+  return &(db->wares[i]);
 }
 
 void setNumElm(db_t *db, int a) {

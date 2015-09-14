@@ -14,6 +14,7 @@ typedef struct databas {
 int getNumElm(db_t*);
 int getSize(db_t*);
 int getChunk(db_t*);
+Ware* getWare(db_t*, int);
 void setNumElm(db_t*, int);
 void setSize(db_t*, int);
 void setChunk(db_t*, int);
