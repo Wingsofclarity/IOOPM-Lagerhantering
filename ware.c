@@ -1,10 +1,6 @@
 #include "ware.h"
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
 
-
-char* getName(Ware *w) {
+char* getName(Ware const *w) {
   return w->name;
 };
 
@@ -27,27 +23,22 @@ void setPrice(Ware *w, int a) {
 
 void setLoc(Ware *w, char *s) {
   char out[4];
-  if (s[0]>='a' && s[0]<='z') {
+  if (s[0]>='a' && s[0]<='z') {//If lower case letter it changes to upper case.
     out[0]=(char) s[0]-32;
   }
-  else if (s[0]<'A' || s[0]>'Z'){
-    out[0]='A';
-    puts("Not a valid input");
+  else if (s[0]<'A' || s[0]>'Z'){//If not a letter.
+    out[0]='-';
   }
   else out[0] = s[0];
   
-  if (s[1]<'0' || s[1]>'9'){
-    out[1]='0';
-    puts("Not a valid input");
+  if (s[1]<'0' || s[1]>'9' || s[2]<'0' || s[2]>'9'){//Char not a number.
+    out[1]='-';
+    out[2]='-';
   }
-  else out[1]=s[1];
-  
-  if (s[2]<'0' || s[2]>'9'){
-    out[2]='0';
-    puts("Not a valid input");
+  else {
+    out[1]=s[1];
+    out[2]=s[2];
   }
-  else out[2]=s[2];
-  printf("Out is %s \n", out);
   out[3] = '\0';
   strcpy(w->loc, out);
 }

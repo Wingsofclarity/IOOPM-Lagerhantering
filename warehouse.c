@@ -40,3 +40,12 @@ int findWare(db_t *db, char *s) {
   }
   return (-1);
 }
+
+int findWareAt(db_t *db, char *loc) {
+  for (int i = 0; i<getNumElm(db); ++i) {
+    if (strcmp(loc,getLoc(db->wares+i))==0) {
+      return i;
+    }
+  }
+  return (-1);
+}

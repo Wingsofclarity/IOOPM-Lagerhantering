@@ -11,6 +11,7 @@ void printAll();
 void maybeQuit();
 char* inputString();
 int getFirstNum();
+int stringToInt(char*);
 void clearInput();
 int countWares();
 void breakPoint();
