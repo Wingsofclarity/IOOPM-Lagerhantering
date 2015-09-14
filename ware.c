@@ -3,11 +3,6 @@
 #include <string.h>
 
 
-//TODO move struct definition in here'
-
-//TODO move struct definition in here
-
-
 char* getName(Ware *w) {
   return w->name;
 };
@@ -62,5 +57,3 @@ void setWare(Ware *w, char *n, int p, char *l) {
   w->price=p;
   setLoc(w,l);
 }
-
-//TODO make set functions...

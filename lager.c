@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+
 #include "lager.h"
 #include "warehouse.h"
 #include "ware.h"
@@ -16,6 +17,14 @@ void menu(db_t *db, bool *quit, int *numElm, db_t *oldDB) {
 
   char *answerPtr = 0;
   int answer=0;
+  puts("Select one of following operations.");
+  puts("1. Add a ware to the warehouse.");
+  puts("2. Remove a ware from the warehouse.");
+  puts("3. Edit a detail about a ware.");
+  puts("4. Show all the wares at once.");
+  puts("5. Undo last operation.");
+  puts("7. Quickly add a test item to the warehouse for testing.");
+  puts("8. Quit.");
   printf("Select one alternative by entering one integer: ");
   
   answerPtr = inputString();
@@ -44,7 +53,7 @@ void menu(db_t *db, bool *quit, int *numElm, db_t *oldDB) {
 
   case 3: 
     *oldDB = *db;
-    editWare(); 
+    editWare(db); 
     break;
 
   case 4: 
@@ -72,7 +81,7 @@ void menu(db_t *db, bool *quit, int *numElm, db_t *oldDB) {
 }
 
 
-void addWare(db_t *db) {
+void addWare(db_t *db) { 
   if (db->numElm>=db->size) {
     printf("Reallocating space!\n");
     db->size+=db->chunk;
@@ -80,7 +89,6 @@ void addWare(db_t *db) {
   }
   
   Ware newWare;
-
   
   char *answerPtr = inputString();
   setName(&newWare, answerPtr);
@@ -97,6 +105,7 @@ void addWare(db_t *db) {
 
   db->wares[db->numElm] = newWare;
   ++db->numElm;
+  puts("Ware added.");
 }
 
 void removeWare(db_t *db) {
@@ -105,7 +114,6 @@ void removeWare(db_t *db) {
     return;
   }
   char *answerPtr = inputString();
-  printf("In removeWare it is %s\n",answerPtr);
   int a = findWare(db,answerPtr);
   free(answerPtr);
   for (int i = a; i<(db->numElm)-1; ++i) {
@@ -117,19 +125,39 @@ void removeWare(db_t *db) {
     db->size=db->size-db->chunk;
     db->wares = realloc(db->wares, sizeof(Ware)*(db->size)); 
   }
-
+  puts("Ware removed.");
 }
 
-void editWare() {
-  puts("Editing your butt.");
+void editWare(db_t *db) {
+  puts("Edit initiated.");
+  puts("What ware do you wnat to edit?");
+  char *answerPtr = inputString();
+  int index = findWare(db,answerPtr);
+  free(answerPtr);
+  puts("What do you want to edit?");
+  answerPtr = inputString();
+  int answer = getFirstNum(answerPtr);
+  free(answerPtr);
+  switch (answer) {
+  case 1:
+    answerPtr = inputString();
+    setName(getWare(db,index),answerPtr);
+    free(answerPtr);
+    break;
+
+  case 2:
+    break;
+    
+    }
+
   
 }
 
 void undo (db_t *db, db_t *oldDB) {
-  puts("Undo initiated");
   db_t  temp = *db;
   *db = *oldDB;
   *oldDB = temp;
+  puts("Last operation undone.");
 }
 
 
