@@ -95,11 +95,18 @@ void addWare(db_t *db) {
   free(answerPtr);
 
   answerPtr = inputString();
-  int price = getFirstNum(answerPtr);
+  int price = stringToInt(answerPtr);
   setPrice(&newWare, price);
   free(answerPtr);
   
   answerPtr = inputString();
+  int index =  findWareAt(db,answerPtr);
+  while (index!=-1 && strcmp(answerPtr,"---")!=0) {
+    printf("Location already occupied by %s.\n", getName(getWare(db,index)));
+    printf("Please enter another location: ");
+    answerPtr = inputString();
+    index =  findWareAt(db,answerPtr);
+  }
   setLoc(&newWare, answerPtr);
   free(answerPtr);
 
@@ -133,24 +140,50 @@ void editWare(db_t *db) {
   puts("What ware do you wnat to edit?");
   char *answerPtr = inputString();
   int index = findWare(db,answerPtr);
+  if (index==-1) {
+    printf("Can't find ware %s.", answerPtr);
+    puts("Returning to menu");
+    free(answerPtr);
+    return;
+  }
   free(answerPtr);
   puts("What do you want to edit?");
+  puts("1. Edit name.");
+  puts("2. Edit price.");
+  puts("3. Edit location");
+  puts("8. Never mind...");
   answerPtr = inputString();
   int answer = getFirstNum(answerPtr);
   free(answerPtr);
   switch (answer) {
   case 1:
+    printf("Enter the new name:");
     answerPtr = inputString();
     setName(getWare(db,index),answerPtr);
     free(answerPtr);
     break;
 
   case 2:
+    printf("The old price is %d. Enter the new price:",getPrice(getWare(db,index)));
+    answerPtr = inputString();
+    int price = getFirstNum(answerPtr);
+    setPrice(getWare(db,index),price);
+    free(answerPtr);
+    break;
+
+  case 3:
+    printf("The old location is %s. Enter the new price:",getLoc(getWare(db,index)));
+    break;
+
+  case 4:
+    printf("The old price is %d. Enter the new price:",getPrice(getWare(db,index)));
     break;
     
+  case 8: 
+    puts("Edit canceled");
+    return;
     }
-
-  
+  puts("Ware edited.");
 }
 
 void undo (db_t *db, db_t *oldDB) {
@@ -168,8 +201,8 @@ void printAll(db_t *db) {//(Currently won't print more than 20 wares.
   }
   for (int i = 0; i<db->numElm && i<20 ; ++i) {
     printf("Ware '%s' costs '%d' and is at '%s'.\n",
-	   db->wares[i].name,
-	   db->wares[i].price,
+	   getName(&db->wares[i]),
+	   getPrice(&db->wares[i]),
 	   getLoc(&db->wares[i]));
   }
   return;
@@ -212,6 +245,17 @@ int getFirstNum(char *s) {
   return 0;
 }
 
+int stringToInt(char *s){
+  int a = 0;
+  for (int i = 0; s[i]!='\0'; ++i) {
+    if (s[i]>='0' && s[i]<= '9') {
+      a*=10;
+      a += (s[i] - (int) '0');
+    }
+  }
+  return a;
+}
+
 void clearInput() {
   fflush(stdout);
   while (getchar()!='\n'){  fflush(stdout);}
@@ -236,7 +280,7 @@ void quickAdd(db_t *db) {
   int price = 0;
   setPrice(&newWare, price);
 
-  char location[4] = {'l','o','c','\0'};
+  char location[4] = {'A','0','0','\0'};
   setLoc(&newWare,location);
 
   db->wares[db->numElm] = newWare;

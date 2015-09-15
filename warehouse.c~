@@ -1,8 +1,4 @@
-#include "ware.h"
 #include "warehouse.h"
-#include <stdlib.h>
-#include <string.h>
-
 
 int getNumElm(db_t *db) {
   return db->numElm;
@@ -16,8 +12,8 @@ int getChunk(db_t *db) {
   return  db->chunk;
 }
 
-Ware getWare(db_t *db, int i) {
-  return db->wares[i];
+Ware* getWare(db_t *db, int i) {
+  return &(db->wares[i]);
 }
 
 void setNumElm(db_t *db, int a) {
@@ -35,6 +31,15 @@ void setChunk(db_t *db, int a) {
 int findWare(db_t *db, char *s) {
   for (int i = 0; i<db->numElm; ++i) {
     if (strcmp(s,getName(db->wares+i))==0) {
+      return i;
+    }
+  }
+  return (-1);
+}
+
+int findWareAt(db_t *db, char *loc) {
+  for (int i = 0; i<getNumElm(db); ++i) {
+    if (strcmp(loc,getLoc(db->wares+i))==0) {
       return i;
     }
   }

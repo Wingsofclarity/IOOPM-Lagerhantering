@@ -1,7 +1,7 @@
 #ifndef WARE_H_  /* Include guard */
 #define WARE_H_
-#include <stdbool.h>
-#include <stdlib.h>
+/*#include <stdbool.h>
+  #include <stdlib.h>*/
 #include <string.h>
 
 
@@ -12,9 +12,6 @@ typedef struct WareTag
   int price;
   char loc[3];
 }Ware;
-
-
-//struct WareTag;
 
 char* getName(Ware const*);
 int getPrice(Ware*);

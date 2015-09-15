@@ -1,8 +1,4 @@
-#include "ware.h"
 #include "warehouse.h"
-#include <stdlib.h>
-#include <string.h>
-
 
 int getNumElm(db_t *db) {
   return db->numElm;
@@ -20,8 +16,16 @@ Ware* getWare(db_t *db, int i) {
   return &(db->wares[i]);
 }
 
+Ware* getWares(db_t *db) {
+  return getWare(db,0);
+}
+
 void setNumElm(db_t *db, int a) {
   db->numElm=a;
+}
+
+void plusElm(db_t *db) {
+  ++db->numElm;
 }
 
 void setSize(db_t *db, int a) {
