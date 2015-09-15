@@ -12,6 +12,10 @@ char* getLoc(Ware *w) {
   return w->loc;
 };
 
+char* getDescription(Ware *w) {
+  return w->description;
+}
+
 void setName(Ware *w, char *s) {
   strcpy(w->name,s);
 }

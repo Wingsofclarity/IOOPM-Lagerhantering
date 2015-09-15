@@ -82,17 +82,20 @@ void addWare(db_t *db) {
   
   Ware newWare;
 
+  //Choose name
   printf("Enter ware name: ");
   char *answerPtr = inputString();
   setName(&newWare, answerPtr);
   free(answerPtr);
 
+  //Choose price
   printf("Enter the price: ");
   answerPtr = inputString();
   int price = stringToInt(answerPtr);
   setPrice(&newWare, price);
   free(answerPtr);
 
+  //Choose location
   printf("Enter %s's location: ", getName(&newWare));
   answerPtr = inputString();
   int index =  findWareAt(db,answerPtr);
@@ -105,6 +108,12 @@ void addWare(db_t *db) {
   setLoc(&newWare, answerPtr);
   free(answerPtr);
 
+  //Choose description
+  printf("Enter ware description (or skip by pressing enter): ");
+  answerPtr = inputString();
+  setDescription(&newWare,answerPtr);
+  free(answerPtr);
+  
   getWares(db)[getNumElm(db)] = newWare;
   plusElm(db);
   puts("Ware added.");
@@ -146,20 +155,21 @@ void editWare(db_t *db) {
   puts("1. Edit name.");
   puts("2. Edit price.");
   puts("3. Edit location");
+  puts("4. Edit description");
   puts("8. Never mind...");
   answerPtr = inputString();
   int answer = getFirstNum(answerPtr);
   free(answerPtr);
   switch (answer) {
   case 1:
-    printf("Enter the new name:");
+    printf("Enter the new name: ");
     answerPtr = inputString();
     setName(getWare(db,index),answerPtr);
     free(answerPtr);
     break;
 
   case 2:
-    printf("The old price is %d. Enter the new price:",getPrice(getWare(db,index)));
+    printf("The old price is %d. Enter the new price: ",getPrice(getWare(db,index)));
     answerPtr = inputString();
     int price = getFirstNum(answerPtr);
     setPrice(getWare(db,index),price);
@@ -167,8 +177,25 @@ void editWare(db_t *db) {
     break;
 
   case 3:
-    printf("The old location is %s. Enter the new price:",getLoc(getWare(db,index)));
+    printf("The old location is %s. Enter the new location: ",getLoc(getWare(db,index)));
+    answerPtr = inputString();
+    int index2 =  findWareAt(db,answerPtr);
+    while (index2!=-1 && strcmp(answerPtr,"---")!=0) {
+      printf("Location already occupied by %s.\n", getName(getWare(db,index)));
+      printf("Please enter another location: ");
+      answerPtr = inputString();
+      index2 =  findWareAt(db,answerPtr);
+    }
+    setLoc(getWare(db,index), answerPtr);
+    free(answerPtr);
     break;
+
+  case 4:
+    printf("The current description is '%s'. \n",getDescription(getWare(db,index)));
+    printf("Enter the new description here: ");
+    answerPtr=inputString();
+    setDescription(getWare(db,index),answerPtr);
+    free(answerPtr);
     
   case 8: 
     puts("Edit canceled");
@@ -279,6 +306,9 @@ void quickAdd(db_t *db) {
 
   char location[4] = {'A','0','0','\0'};
   setLoc(&newWare,location);
+
+  char description[4] = {'E','E','D','\0'};
+  setDescription(&newWare,description);
 
   getWares(db)[getNumElm(db)] = newWare;
   plusElm(db);

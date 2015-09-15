@@ -16,7 +16,7 @@ typedef struct WareTag{
 char* getName(Ware const*);
 int getPrice(Ware*);
 char* getLoc(Ware*);
-char getDescription(Ware*);
+char* getDescription(Ware*);
 
 void setName(Ware*, char*);
 void setPrice(Ware*, int);
