@@ -5,6 +5,7 @@
 //#include <string.h>
 
 
+typedef struct databas db_t;
 typedef struct databas {
   Ware *wares;
   int numElm;
@@ -22,6 +23,7 @@ void setNumElm(db_t*, int);
 void plusElm(db_t*);
 void setSize(db_t*, int);
 void setChunk(db_t*, int);
+void setWares(db_t*,Ware*);
 
 int findWare(db_t*,char*);
 int findWareAt(db_t*,char*);

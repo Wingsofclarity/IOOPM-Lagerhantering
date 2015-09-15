@@ -11,7 +11,7 @@
 #include "ware.h"
 
 void welcome();
-void menu(db_t*, bool*, int*, db_t*);
+void menu(db_t*, bool*, db_t*);
 void addWare(db_t*);
 void removeWare(db_t*);
 void editWare(db_t*);

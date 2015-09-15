@@ -18,9 +18,6 @@ int main()
   while (quit==false) { //Main loop
     menu(&db,&quit,&numElm, &oldDB);
   }
-  puts("Press enter to quit.");
-  fflush(stdout); 
-  getchar();
   return 0;
 }
 

@@ -1,5 +1,7 @@
 #include "warehouse.h"
 
+
+
 int getNumElm(db_t *db) {
   return db->numElm;
 }
@@ -34,6 +36,10 @@ void setSize(db_t *db, int a) {
 
 void setChunk(db_t *db, int a) {
   db->chunk=a;
+}
+
+void setWares(db_t *db, Ware *w) {
+  db->wares=w;
 }
 
 int findWare(db_t *db, char *s) {

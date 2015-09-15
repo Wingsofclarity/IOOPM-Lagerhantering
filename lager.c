@@ -5,7 +5,7 @@ void welcome() {
   printf("Welcome to my storage thingy...\n");
 }
 
-void menu(db_t *db, bool *quit, int *numElm, db_t *oldDB) {
+void menu(db_t *db, bool *quit, db_t *oldDB) {
 
   char *answerPtr = 0;
   int answer=0;
@@ -34,17 +34,17 @@ void menu(db_t *db, bool *quit, int *numElm, db_t *oldDB) {
   
   switch (answer) {
   case 1: 
-    *oldDB = *db;
+    //*oldDB = *db;
     addWare(db); 
     break;
 
   case 2:
-    *oldDB = *db;
+    //*oldDB = *db;
     removeWare(db);
     break;
 
   case 3: 
-    *oldDB = *db;
+    //*oldDB = *db;
     editWare(db); 
     break;
 
@@ -57,7 +57,7 @@ void menu(db_t *db, bool *quit, int *numElm, db_t *oldDB) {
     break;
 
   case 7:
-    *oldDB = *db;
+    //*oldDB = *db;
     quickAdd(db);
     break;
 
@@ -77,7 +77,7 @@ void addWare(db_t *db) {
   if (getNumElm(db)>=getSize(db)) {
     printf("Reallocating space!\n");
     setSize(db,(getSize(db)+getChunk(db)));
-    db->wares = realloc(getWares(db), sizeof(Ware)*(getSize(db)));
+    setWares(db, realloc(getWares(db), sizeof(Ware)*(getSize(db))));
   }
   
   Ware newWare;
@@ -105,7 +105,7 @@ void addWare(db_t *db) {
   setLoc(&newWare, answerPtr);
   free(answerPtr);
 
-  db->wares[getNumElm(db)] = newWare;
+  getWares(db)[getNumElm(db)] = newWare;
   plusElm(db);
   puts("Ware added.");
 }
@@ -119,13 +119,13 @@ void removeWare(db_t *db) {
   int a = findWare(db,answerPtr);
   free(answerPtr);
   for (int i = a; i<(getNumElm(db))-1; ++i) {
-    db->wares[i]=db->wares[i+1]; 
+    getWares(db)[i]=getWares(db)[i+1]; 
   }
-  --db->numElm;
-  if ((db->size)-(getNumElm(db))>=db->chunk) {
+  setNumElm(db,getNumElm(db)-1);
+  if ((getSize(db))-(getNumElm(db))>=getChunk(db)) {
     printf("Reallocating space!\n");
-    db->size=db->size-db->chunk;
-    db->wares = realloc(db->wares, sizeof(Ware)*(db->size)); 
+    setSize(db, getSize(db)-getChunk(db));
+    setWares(db,realloc(getWares(db), sizeof(Ware)*(getSize(db)))); 
   }
   puts("Ware removed.");
 }
@@ -178,10 +178,11 @@ void editWare(db_t *db) {
 }
 
 void undo (db_t *db, db_t *oldDB) {
+  /*
   db_t  temp = *db;
   *db = *oldDB;
   *oldDB = temp;
-  puts("Last operation undone.");
+  puts("Last operation undone.");*/
 }
 
 
@@ -192,9 +193,9 @@ void printAll(db_t *db) {//(Currently won't print more than 20 wares.
   }
   for (int i = 0; i<getNumElm(db) && i<20 ; ++i) {
     printf("Ware '%s' costs '%d' and is at '%s'.\n",
-	   getName(&db->wares[i]),
-	   getPrice(&db->wares[i]),
-	   getLoc(&db->wares[i]));
+	   getName(&getWares(db)[i]),
+	   getPrice(&getWares(db)[i]),
+	   getLoc(&getWares(db)[i]));
   }
   return;
 }
@@ -249,6 +250,7 @@ int stringToInt(char *s){
       a += (s[i] - (int) '0');
     }
   }
+  if (s[0]=='-') a*=-1;
   return a;
 }
 
@@ -260,10 +262,10 @@ void clearInput() {
 
 
 void quickAdd(db_t *db) {
-   if (getNumElm(db)>=db->size) {
+   if (getNumElm(db)>=getSize(db)) {
     printf("Reallocating space!\n");
-    db->size+=db->chunk;
-    db->wares = realloc(db->wares, sizeof(Ware)*(db->size));
+    setSize(db, getSize(db)+getChunk(db));
+    setWares(db, realloc(getWares(db), sizeof(Ware)*(getSize(db))));
   }
   
   Ware newWare;
@@ -278,6 +280,6 @@ void quickAdd(db_t *db) {
   char location[4] = {'A','0','0','\0'};
   setLoc(&newWare,location);
 
-  db->wares[getNumElm(db)] = newWare;
+  getWares(db)[getNumElm(db)] = newWare;
   plusElm(db);
 }

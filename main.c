@@ -2,21 +2,21 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+
 #include "lager.h"
 #include "warehouse.h"
 
 int main()
 {
-
-  int numElm = 0; //Number of element in wares.
   bool quit=false;
   
-  db_t db = { .chunk = 16 };
+  db_t db;
+  setChunk(&db,16);
   db_t oldDB = db;
 
   welcome();
   while (quit==false) { //Main loop
-    menu(&db,&quit,&numElm, &oldDB);
+    menu(&db,&quit, &oldDB);
   }
   return 0;
 }

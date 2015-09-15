@@ -49,3 +49,7 @@ void setWare(Ware *w, char *n, int p, char *l) {
   w->price=p;
   setLoc(w,l);
 }
+
+void setDescription(Ware* w, char *c) {
+  strcpy(w->description, c);
+}
