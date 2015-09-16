@@ -157,6 +157,7 @@ void editWare(db_t *db) {
   puts("3. Edit location");
   puts("4. Edit description");
   puts("8. Never mind...");
+  printf("Select one alternative by entering one integer: ");
   answerPtr = inputString();
   int answer = getFirstNum(answerPtr);
   free(answerPtr);
@@ -181,7 +182,7 @@ void editWare(db_t *db) {
     answerPtr = inputString();
     int index2 =  findWareAt(db,answerPtr);
     while (index2!=-1 && strcmp(answerPtr,"---")!=0) {
-      printf("Location already occupied by %s.\n", getName(getWare(db,index)));
+      printf("Location already occupied by %s.\n", getName(getWare(db,index2)));
       printf("Please enter another location: ");
       answerPtr = inputString();
       index2 =  findWareAt(db,answerPtr);
@@ -196,11 +197,16 @@ void editWare(db_t *db) {
     answerPtr=inputString();
     setDescription(getWare(db,index),answerPtr);
     free(answerPtr);
-    
+
   case 8: 
     puts("Edit canceled");
     return;
-    }
+
+  default:
+    puts("Critical error.");
+    return;
+  }
+
   puts("Ware edited.");
 }
 
@@ -293,6 +299,7 @@ void quickAdd(db_t *db) {
     printf("Reallocating space!\n");
     setSize(db, getSize(db)+getChunk(db));
     setWares(db, realloc(getWares(db), sizeof(Ware)*(getSize(db))));
+    db->wares = realloc(db->wares, sizeof(Ware)*(db->size));
   }
   
   Ware newWare;
@@ -310,6 +317,6 @@ void quickAdd(db_t *db) {
   char description[4] = {'E','E','D','\0'};
   setDescription(&newWare,description);
 
-  getWares(db)[getNumElm(db)] = newWare;
+  db->wares[db->numElm] = newWare;
   plusElm(db);
 }

@@ -9,13 +9,14 @@
 
 #include "warehouse.h"
 #include "ware.h"
+#include "undo.h"
 
 void welcome();
-void menu(db_t*, bool*, db_t*);
+void menu(db_t*, bool*, action_t*);
 void addWare(db_t*);
 void removeWare(db_t*);
 void editWare(db_t*);
-void undo(db_t*, db_t*);
+void undo(db_t*, action_t*);
 void printAll(db_t*);
 void maybeQuit(bool*);
 char* inputString();

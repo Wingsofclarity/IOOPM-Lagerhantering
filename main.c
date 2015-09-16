@@ -5,18 +5,18 @@
 
 #include "lager.h"
 #include "warehouse.h"
+#include "undo.h"
 
-int main()
-{
+int main(){
   bool quit=false;
   
   db_t db={.chunk=0};
   setChunk(&db,16);
-  db_t oldDB = db;
+  action_t  undo_action;  
 
   welcome();
   while (quit==false) { //Main loop
-    menu(&db,&quit, &oldDB);
+    menu(&db,&quit, &undo_action);
   }
   return 0;
 }

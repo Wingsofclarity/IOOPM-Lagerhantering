@@ -1,0 +1,6 @@
+struct action_t
+{
+  int type; // NOTHING = 0, ADD = 1, REMOVE = 2, EDIT = 3
+  goods_s *merch;
+  goods_s copy;
+};

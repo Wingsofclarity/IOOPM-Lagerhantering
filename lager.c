@@ -1,11 +1,12 @@
 #include "lager.h"
-//gcc -Wall -std=c11 main.c lager.c ware.c warehouse.c -o main
+//gcc -Wall -std=c11 main.c lager.c ware.c warehouse.c undo.c -o main
+
 
 void welcome() {
   printf("Welcome to my storage thingy...\n");
 }
 
-void menu(db_t *db, bool *quit, db_t *oldDB) {
+void menu(db_t *db, bool *quit, action_t *undo_action) {
 
   char *answerPtr = 0;
   int answer=0;
@@ -34,17 +35,17 @@ void menu(db_t *db, bool *quit, db_t *oldDB) {
   
   switch (answer) {
   case 1: 
-    //*oldDB = *db;
+    setType(undo_action, 1);
     addWare(db); 
     break;
 
   case 2:
-    //*oldDB = *db;
+    setType(undo_action, 2);
     removeWare(db);
     break;
 
-  case 3: 
-    //*oldDB = *db;
+  case 3:
+    setType(undo_action, 3);
     editWare(db); 
     break;
 
@@ -53,11 +54,11 @@ void menu(db_t *db, bool *quit, db_t *oldDB) {
     break;
 
   case 5: 
-    undo(db,oldDB); 
+    undo(db, undo_action);
+    setType(undo_action, 0);
     break;
 
   case 7:
-    //*oldDB = *db;
     quickAdd(db);
     break;
 
@@ -210,12 +211,24 @@ void editWare(db_t *db) {
   puts("Ware edited.");
 }
 
-void undo (db_t *db, db_t *oldDB) {
-  /*
-  db_t  temp = *db;
-  *db = *oldDB;
-  *oldDB = temp;
-  puts("Last operation undone.");*/
+void undo (db_t *db, action_t *a) {
+  switch(getType(a)){
+  case 0:
+    puts("There is nothing to undo.");
+    return;
+
+  case 1:
+    puts("undoing add");
+    return;
+
+  case 2:
+    puts("Undoing remove");
+    return;
+
+  case 3:
+    puts("Undoing edit");
+    return;
+  }
 }
 
 
