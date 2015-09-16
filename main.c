@@ -10,7 +10,7 @@ int main()
 {
   bool quit=false;
   
-  db_t db;
+  db_t db={.chunk=0};
   setChunk(&db,16);
   db_t oldDB = db;
 

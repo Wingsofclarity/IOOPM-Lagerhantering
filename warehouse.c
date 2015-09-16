@@ -38,6 +38,10 @@ void setChunk(db_t *db, int a) {
   db->chunk=a;
 }
 
+/*void setWare(db_t *db, int a, Ware w) {
+  db[a].
+}*/
+
 void setWares(db_t *db, Ware *w) {
   db->wares=w;
 }

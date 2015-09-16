@@ -57,3 +57,4 @@ void setWare(Ware *w, char *n, int p, char *l) {
 void setDescription(Ware* w, char *c) {
   strcpy(w->description, c);
 }
+

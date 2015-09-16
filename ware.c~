@@ -12,6 +12,10 @@ char* getLoc(Ware *w) {
   return w->loc;
 };
 
+char* getDescription(Ware *w) {
+  return w->description;
+}
+
 void setName(Ware *w, char *s) {
   strcpy(w->name,s);
 }
@@ -48,4 +52,8 @@ void setWare(Ware *w, char *n, int p, char *l) {
   if (p<0) p=0;
   w->price=p;
   setLoc(w,l);
+}
+
+void setDescription(Ware* w, char *c) {
+  strcpy(w->description, c);
 }
