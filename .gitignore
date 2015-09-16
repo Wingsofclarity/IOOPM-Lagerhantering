@@ -1,6 +1,2 @@
 main
-getctest.c~
-lager.c~
-ware.c~
-ware.h~
-lager.h~
+*.c~

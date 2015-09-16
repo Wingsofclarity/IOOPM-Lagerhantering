@@ -12,7 +12,7 @@ typedef struct action
 
 int getType(action_t*);
 Ware *getMerch(action_t*);
-Ware copy(action_t*);
+Ware getCopy(action_t*);
 
 void setType(action_t*, int);
 void setMerch(action_t*, Ware*);

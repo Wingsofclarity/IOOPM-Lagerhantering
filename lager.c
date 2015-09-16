@@ -14,39 +14,36 @@ void menu(db_t *db, bool *quit, action_t *undo_action) {
   puts("1. Add a ware to the warehouse.");
   puts("2. Remove a ware from the warehouse.");
   puts("3. Edit a detail about a ware.");
-  puts("4. Show all the wares at once.");
+  puts("4. Show wares.");
   puts("5. Undo last operation.");
   puts("7. Quickly add a test item to the warehouse for testing.");
   puts("8. Quit.");
   printf("Select one alternative by entering one integer: ");
   
   answerPtr = inputString();
-  answer = getFirstNum(answerPtr);
+  answer = stringToInt(answerPtr);
   free(answerPtr);
   
   while (answer<=0 || answer>8) {//Checking if choice is avaible.
     printf("Invalid entry.\n");
     printf("Select one alternative by entering one integer: ");
     answerPtr = inputString();
-    answer = getFirstNum(answerPtr);
+    answer = stringToInt(answerPtr);
     free(answerPtr);
     
   }
   
   switch (answer) {
   case 1: 
-    setType(undo_action, 1);
-    addWare(db); 
+    addWare(db, undo_action); 
     break;
 
   case 2:
-    setType(undo_action, 2);
-    removeWare(db);
+    removeWare(db, undo_action);
     break;
 
   case 3:
-    setType(undo_action, 3);
-    editWare(db); 
+    editWare(db, undo_action); 
     break;
 
   case 4: 
@@ -74,7 +71,7 @@ void menu(db_t *db, bool *quit, action_t *undo_action) {
 }
 
 
-void addWare(db_t *db) { 
+void addWare(db_t *db, action_t* undo_action) { 
   if (getNumElm(db)>=getSize(db)) {
     printf("Reallocating space!\n");
     setSize(db,(getSize(db)+getChunk(db)));
@@ -114,33 +111,54 @@ void addWare(db_t *db) {
   answerPtr = inputString();
   setDescription(&newWare,answerPtr);
   free(answerPtr);
-  
-  getWares(db)[getNumElm(db)] = newWare;
+
+  //Assigning values for undo opertaion.
+  setType(undo_action, 1);
+      
+  getWares(db)[getNumElm(db)] = newWare; //The newly created ware is inserted.
   plusElm(db);
   puts("Ware added.");
 }
 
-void removeWare(db_t *db) {
-  if (getNumElm(db)<=0) {
+void removeWare(db_t *db, action_t* undo_action) {
+  if (getNumElm(db)<=0) {//If it's empty.
     printf("Warehouse already empty.\n");
     return;
   }
+
+  
   char *answerPtr = inputString();
-  int a = findWare(db,answerPtr);
+  int a = findWare(db,answerPtr); //Index of the found ware is saved in a. a==-1 if it wasn't found.
+  while (a==-1) {
+    printf("No ware with name '%s' was found.\n", answerPtr);
+    printf("Please enter a valid name: ");
+    answerPtr = inputString();
+    a = findWare(db,answerPtr);
+  }
   free(answerPtr);
-  for (int i = a; i<(getNumElm(db))-1; ++i) {
+
+  //Assigning values for undo opertaion.
+  setCopy(undo_action, getWare(db, a));
+  setType(undo_action, 2);
+
+  //Move all items that follows the removed one closer to start.
+  for (int i = a; i<(getNumElm(db))-1; ++i) { 
     getWares(db)[i]=getWares(db)[i+1]; 
   }
-  setNumElm(db,getNumElm(db)-1);
-  if ((getSize(db))-(getNumElm(db))>=getChunk(db)) {
+
+  
+  setNumElm(db,getNumElm(db)-1); 
+  
+  if ((getSize(db))-(getNumElm(db))>=getChunk(db)) { //Free space
     printf("Reallocating space!\n");
     setSize(db, getSize(db)-getChunk(db));
     setWares(db,realloc(getWares(db), sizeof(Ware)*(getSize(db)))); 
   }
+  
   puts("Ware removed.");
 }
 
-void editWare(db_t *db) {
+void editWare(db_t *db, action_t* undo_action) {
   puts("Edit initiated.");
   puts("What ware do you wnat to edit?");
   char *answerPtr = inputString();
@@ -160,8 +178,14 @@ void editWare(db_t *db) {
   puts("8. Never mind...");
   printf("Select one alternative by entering one integer: ");
   answerPtr = inputString();
-  int answer = getFirstNum(answerPtr);
+  int answer = stringToInt(answerPtr);
   free(answerPtr);
+
+  //Assign values for undo opertaion
+  setType(undo_action, 3);
+  setMerch(undo_action, getWare(db,index));
+  setCopy(undo_action,  getWare(db,index));
+  
   switch (answer) {
   case 1:
     printf("Enter the new name: ");
@@ -173,7 +197,7 @@ void editWare(db_t *db) {
   case 2:
     printf("The old price is %d. Enter the new price: ",getPrice(getWare(db,index)));
     answerPtr = inputString();
-    int price = getFirstNum(answerPtr);
+    int price = stringToInt(answerPtr);
     setPrice(getWare(db,index),price);
     free(answerPtr);
     break;
@@ -181,7 +205,7 @@ void editWare(db_t *db) {
   case 3:
     printf("The old location is %s. Enter the new location: ",getLoc(getWare(db,index)));
     answerPtr = inputString();
-    int index2 =  findWareAt(db,answerPtr);
+    int index2 =  findWareAt(db,answerPtr); //Index2 is index of a ware with the same shelf the user just entered.
     while (index2!=-1 && strcmp(answerPtr,"---")!=0) {
       printf("Location already occupied by %s.\n", getName(getWare(db,index2)));
       printf("Please enter another location: ");
@@ -198,6 +222,7 @@ void editWare(db_t *db) {
     answerPtr=inputString();
     setDescription(getWare(db,index),answerPtr);
     free(answerPtr);
+    break;
 
   case 8: 
     puts("Edit canceled");
@@ -215,20 +240,56 @@ void undo (db_t *db, action_t *a) {
   switch(getType(a)){
   case 0:
     puts("There is nothing to undo.");
-    return;
+    break;
 
   case 1:
     puts("undoing add");
-    return;
+    undoAdd(db);
+    break;
 
   case 2:
     puts("Undoing remove");
-    return;
+    undoRemove(db, a);
+    break;
 
   case 3:
     puts("Undoing edit");
-    return;
+    undoEdit(db, a);
+    break;
   }
+  
+  setType(a,0);
+}
+
+void undoAdd(db_t *db) {
+  setNumElm(db,getNumElm(db)-1);
+  if ((getSize(db))-(getNumElm(db))>=getChunk(db)) {
+    printf("Reallocating space!\n");
+    setSize(db, getSize(db)-getChunk(db));
+    setWares(db,realloc(getWares(db), sizeof(Ware)*(getSize(db)))); 
+  }
+  puts("'Add ware' undone.");
+}
+
+void undoRemove(db_t *db, action_t *undo_action) {
+  if (getNumElm(db)>=getSize(db)) { //Increasing space if needed.
+    printf("Reallocating space!\n");
+    setSize(db, getSize(db)+getChunk(db));
+    setWares(db, realloc(getWares(db), sizeof(Ware)*(getSize(db))));
+    db->wares = realloc(db->wares, sizeof(Ware)*(db->size));
+  }
+  
+  Ware oldWare = getCopy(undo_action);
+
+  db->wares[db->numElm] = oldWare;
+  plusElm(db);
+  puts("'Remove ware' undone.");
+}
+
+void undoEdit(db_t *db, action_t *undo_action) {
+  Ware oldWareDetails = getCopy(undo_action);
+  *getMerch(undo_action)= oldWareDetails;
+  puts("'Edit ware' undone.");
 }
 
 
@@ -237,13 +298,61 @@ void printAll(db_t *db) {//(Currently won't print more than 20 wares.
     printf("There are no wares in the warehouse. :(\n");
     return;
   }
-  for (int i = 0; i<getNumElm(db) && i<20 ; ++i) {
-    printf("Ware '%s' costs '%d' and is at '%s'.\n",
-	   getName(&getWares(db)[i]),
-	   getPrice(&getWares(db)[i]),
-	   getLoc(&getWares(db)[i]));
+
+  int page=0;
+  bool quit =false;
+  while (quit==false) {
+    int pageOffset=page*20;
+    for (int i = 0; i<(getNumElm(db)-pageOffset) && i<20 ; ++i) {
+      printf("[%d]. Ware '%s'\n",i+1 ,getName(&getWares(db)[i+pageOffset]));
+    }
+    if (page>0) {
+      puts("[p]. Previous page");
+    }
+    if (getNumElm(db)>20) {
+      puts("[n]. Next page");
+    }
+    puts("[q]. Return to main menu");
+
+    char *answerPtr = 0;
+    answerPtr=inputString();
+    if (answerPtr[0]>='0' && answerPtr[0]<='9') {
+      int answer = stringToInt(answerPtr);
+      if (answer>=1 && answer<=getNumElm(db)-pageOffset) {
+	answer = pageOffset+answer-1;
+	printDetails(getWare(db, answer));
+      }
+
+    }
+    else  if (answerPtr[0]=='p') {
+      if (page<=0) {
+	puts("This is the first page.");
+      }
+      else --page;
+    }
+    else if (answerPtr[0]=='n') {
+      if (getNumElm(db)-(page+1) * 20 >0){
+	++page;
+      }
+      else puts("This is the last page");
+    }
+    else if (answerPtr[0]=='q') {
+      puts("Returning to menu");
+      quit=true;
+    }
+    else puts("Not a valid command.");
+    puts("Press enter to continue..");
+    clearInput();
+      
   }
   return;
+}
+
+void printDetails(Ware *w) {
+  printf("Name: %s \n", getName(w));
+  printf("Description: %s \n", getDescription(w));
+  printf("Price: %f sek \n", ((float) getPrice(w))/100);
+  printf("Location: %s\n", getLoc(w));
 }
 
 void maybeQuit(bool *quit) {
