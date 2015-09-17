@@ -87,11 +87,22 @@ void addWare(db_t *db, action_t* undo_action) {
   free(answerPtr);
 
   //Choose price
-  printf("Enter the price: ");
-  answerPtr = inputString();
-  int price = stringToInt(answerPtr);
-  setPrice(&newWare, price);
-  free(answerPtr);
+  // Making sure only integer numbers are accepted values
+  bool isInputValid = false;
+  while (isInputValid == false) {
+    printf("Enter the price: ");
+    answerPtr = inputString();
+    if (validInput(answerPtr) == true) {
+        int price = stringToInt(answerPtr);
+	setPrice(&newWare, price);
+	free(answerPtr);
+	isInputValid = true;
+    }
+    else {
+      printf("Bad input: %s\n", answerPtr);
+    }
+  }
+
 
   //Choose location
   printf("Enter %s's location: ", getName(&newWare));
@@ -441,4 +452,19 @@ void quickAdd(db_t *db) {
 
   db->wares[db->numElm] = newWare;
   plusElm(db);
+}
+
+/* Used for checking the validity (in this case that it only consists of numbers) of an input (atm used for addWare) */
+bool validInput(char *input) {
+  char *iter = input;
+  
+  while(iter != NULL && *iter != '\0') {
+    if (isdigit(*iter)) {
+      ++iter;
+    }
+    else {
+      return false;
+    }
+  }
+  return true;
 }

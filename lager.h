@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 
 
 #include "warehouse.h"
@@ -29,5 +30,6 @@ int stringToInt(char*);
 void clearInput();
 int countWares();
 void quickAdd(db_t*);
+bool validInput(char*);
 
 #endif // LAGER_C_
