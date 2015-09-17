@@ -1,7 +1,5 @@
 #ifndef WARE_H_  /* Include guard */
 #define WARE_H_
-/*#include <stdbool.h>
-  #include <stdlib.h>*/
 #include <string.h>
 
 

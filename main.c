@@ -11,7 +11,7 @@ int main(){
   bool quit=false;
   
   db_t db={.chunk=0};
-  setChunk(&db,16);
+  setChunk(&db,2);
   action_t  undo_action;  
 
   welcome();
